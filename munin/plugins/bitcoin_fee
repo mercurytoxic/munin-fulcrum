@@ -1,0 +1,92 @@
+#!/bin/sh
+# -*- sh -*-
+
+: << =cut
+
+=head1 NAME
+
+bitcoin_fee - Plugin to monitor bitcoin daemon.
+
+=head1 CONFIGURATION
+
+Edit the BITSettings are stored in /etc/munin/plugin-conf.d/bitcoin.
+COIN_DATADIR setting to specify the location of your bitcoin data directory.
+Edit the BITCOIN_CLI setting to specify the location of bitcoin-cli.
+
+=head1 NOTES
+
+Uses env.BITCOIN_CLI and env.BITCOIN_DATADIR in /etc/munin/plugin-conf.d/bitcoin
+
+=head1 AUTHOR
+
+shsmith
+
+=head1 LICENSE
+
+GPLv2
+
+=head1 MAGIC MARKERS
+
+ #%# family=auto
+ #%# capabilities=autoconf
+
+=cut
+
+if [ "$1" = "autoconf" ]; then
+	echo yes
+	exit 0
+fi
+
+if [ "$1" = "config" ]; then
+	echo 'graph_title bitcoind fees'
+	echo 'graph_args --base 1000 -l 0'
+	echo 'graph_vlabel satoshi per byte'
+	echo 'graph_category bitcoind'
+	echo 'relayfee.label relayfee'
+	echo 'relayfee.type GAUGE'
+	echo 'mempoolminfee.label mempoolminfee'
+	echo 'mempoolminfee.type GAUGE'
+	echo 'mempoolminfee.cdef mempoolminfee,100000,*'
+	if ${BITCOIN_CLI} --version | grep -q ABC; then
+		ESTIMATESMARTFEE=estimatefee
+	else
+		ESTIMATESMARTFEE=estimatesmartfee
+	fi
+	echo estimatesmartfee1.label $ESTIMATESMARTFEE 1 block
+	echo 'estimatesmartfee1.type GAUGE'
+	echo 'estimatesmartfee1.min 0'
+	echo 'estimatesmartfee1.cdef estimatesmartfee1,100000,*'
+	# Core suggests providing options for targets of: 2,4,6,12,24,48,144,504,1008 where 1008 is one week.
+	for BLOCKS in 2 4 6 12 24 48 144 504 1008
+	do
+		echo estimatesmartfee${BLOCKS}.label $ESTIMATESMARTFEE ${BLOCKS} blocks
+		echo estimatesmartfee${BLOCKS}.type GAUGE
+		echo estimatesmartfee${BLOCKS}.min 0
+		echo estimatesmartfee${BLOCKS}.cdef estimatesmartfee${BLOCKS},100000,*
+	done
+	exit 0
+fi
+
+TFILE=/tmp/munin-bitcoin-fee-$$
+${BITCOIN_CLI} -datadir=$BITCOIN_DATADIR getnetworkinfo > $TFILE
+echo "relayfee.value `grep relayfee $TFILE | grep -o '[0-9\.]*'`"
+
+${BITCOIN_CLI} -datadir=$BITCOIN_DATADIR getmempoolinfo > $TFILE
+echo "mempoolminfee.value `grep mempoolminfee $TFILE | grep -o '[0-9\.]*'`" | grep -v -e ".* 1$"
+
+# Core suggests providing options for targets of: 2,4,6,12,24,48,144,504,1008 where 1008 is one week.
+if ${BITCOIN_CLI} --version | grep -q ABC; then
+	for BLOCKS in 1 2 4 6 12 24 48 144 504 1008
+	do
+		${BITCOIN_CLI} -datadir=$BITCOIN_DATADIR estimatefee ${BLOCKS} > $TFILE
+		echo "estimatesmartfee${BLOCKS}.value `cat $TFILE`"
+	done
+else
+	for BLOCKS in 1 2 4 6 12 24 48 144 504 1008
+	do
+		${BITCOIN_CLI} -datadir=$BITCOIN_DATADIR estimatesmartfee ${BLOCKS} > $TFILE
+		echo "estimatesmartfee${BLOCKS}.value `grep feerate $TFILE | grep -o '[0-9\.]*'`" | grep -v -e ".* 1$"
+	done
+fi
+
+rm $TFILE

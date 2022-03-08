@@ -1,0 +1,6 @@
+
+[bitcoin_*]
+user root
+env.BITCOIN_DATADIR /home/bitcoin
+env.BITCOIN_CLI /usr/bin/bitcoin-cli
+env.ELECTRUMX_DATADIR /home/electrumx

@@ -1,5 +1,0 @@
-
-[electrumx_*]
-user root
-env.RPC_PORT 8000
-env.ELECTRUMX_RPC /usr/bin/electrumx-rpc

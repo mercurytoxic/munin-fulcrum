@@ -1,0 +1,5 @@
+
+[fulcrum_*]
+user root
+env.RPC_PORT 8000
+env.FULCRUM_RPC /usr/bin/FulcrumAdmin -p 8000

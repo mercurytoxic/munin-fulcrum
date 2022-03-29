@@ -1,12 +1,14 @@
+Munin-Node plugin to monitor Fulcrum and Bitcoin
+------------------------------------
 
-Munin-Node plugin to monitor ElectrumX and Bitcoin
---------------------------------------------------
+This plugin was heavily based on the wonderful munin plugin by 
+Samuel Smith @ https://github.com/shsmith.
 
 These Munin-Node plugins gather data from your running instance of 
-ElectrumX server and/or Bitcoin daemon.
+Fulcrum server and/or Bitcoin daemon.
 
-ElectrumX server: 
-    https://github.com/kyuupichan/electrumx
+Fulcrum server:
+    https://github.com/cculianu/Fulcrum
     
 Bitcoin daemon:
     https://github.com/bitcoin/bitcoin
@@ -20,7 +22,7 @@ Install munin and apache2.  For Ubuntu systems the commands are::
     sudo apt-get update 
     sudo apt-get install munin apache2
 
-The electrumx_bw plugin uses nethogs. To install it::
+The fulcrum_bw plugin uses nethogs. To install it::
 
     sudo apt-get install nethogs
 
@@ -42,41 +44,40 @@ Once you have munin up and running, add the following files::
     bitcoin_ticker_bchsv
     bitcoin_tx
     bitcoin_vm
-    electrumx_bw
-    electrumx_caches
-    electrumx_client_protocol
-    electrumx_client_versions
-    electrumx_connrate
-    electrumx_err
-    electrumx_io
-    electrumx_lsof
-    electrumx_mem
-    electrumx_peers
-    electrumx_peer_versions
-    electrumx_reqcounts
-    electrumx_ses
-    electrumx_sub
-    electrumx_tx
-    electrumx_users
+    fulcrum_bw
+    fulcrum_caches
+    fulcrum_client_protocol
+    fulcrum_client_versions
+    fulcrum_connrate
+    fulcrum_err
+    fulcrum_io
+    fulcrum_lsof
+    fulcrum_mem
+    fulcrum_peers
+    fulcrum_peer_versions
+    fulcrum_reqcounts
+    fulcrum_ses
+    fulcrum_sub
+    fulcrum_tx
+    fulcrum_users
 
 These plugins require configuration. 
 The configurations are in the following files added to your plugin-conf.d folder.::
 
  /etc/munin/plugin-conf.d/
     bitcoin
-    electrumx
+    fulcrum
 
 You will need to edit /etc/munin/plugin-conf.d/bitcoin. 
 *******************************************************
 
 - Adjust the ``BITCOIN_DATADIR`` environment to specify where to find your bitcoin data directory.
 - Adjust the ``BITCOIN_CLI`` environment to specify where to find bitcoin-cli.
-- Adjust the ``ELECTRUMX_DATADIR`` environment to specify where to find your electrumx data directory.
 
-You will need to edit /etc/munin/plugin-conf.d/electrumx. 
+You will need to edit /etc/munin/plugin-conf.d/fulcrum.
 *********************************************************
 
-- Adjust the ``ELECTRUMX_RPC`` environment to specify where to find electrumx_rpc.py.
+- Adjust the ``FULCRUM_RPC`` environment to specify where to find FulcrumAdmin.
 
 You will need to make the munin plugins executable.
 ***************************************************
@@ -93,22 +94,9 @@ Versions
 
 These plugins are working with the following software versions::
 
- Operating System:   Ubuntu 18.04
- Munin-Node:         2.0.25
- ElectrumX:          1.11.0
- Bitcoin Core:       0.17.1
- Bitcoin ABC:        0.18.4
- Bitcoin SV:         0.1.0
-
-Live Example
-------------
-
-You can see these plugins in action here:
-    http://vps.hsmiths.com:49001/munin/hsmiths.com/vps.hsmiths.com/
+ Munin-Node:         2.0.69
+ Fulcrum:            1.6.0
 
 
-=======================================================
 
-**Samuel Smith**  shsmith@socal.rr.com   https://github.com/shsmith
 
-Tip jar: 1CspNS6AFsDbqiocsvqpjiMPrtviRCaXz5

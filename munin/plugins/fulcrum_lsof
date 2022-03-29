@@ -5,16 +5,16 @@
 
 =head1 NAME
 
-electrumx_lsof - Plugin to monitor ElectrumX server.
+fulcrum_lsof - Plugin to monitor Fulcrum server.
 
 =head1 CONFIGURATION
 
-Settings are stored in /etc/munin/plugin-conf.d/electrumx.
-Edit the ELECTRUMX_RPC setting to specify the location of electrumx_rpc.py.
+Settings are stored in /etc/munin/plugin-conf.d/fulcrum.
+Edit the FULCRUM_RPC setting to specify the location of FulcrumAdmin.
 
 =head1 NOTES
 
-Uses env.ELECTRUMX_RPC in /etc/munin/plugin-conf.d/electrumx
+Uses env.FULCRUM_RPC in /etc/munin/plugin-conf.d/fulcrum
 
 =head1 AUTHOR
 
@@ -37,10 +37,10 @@ if [ "$1" = "autoconf" ]; then
 fi
 
 if [ "$1" = "config" ]; then
-	echo 'graph_title ElectrumX Files'
+	echo 'graph_title Fulcrum Files'
 	echo 'graph_args --base 1000 -l 0'
 	echo 'graph_vlabel value'
-	echo 'graph_category ElectrumX'
+	echo 'graph_category Fulcrum'
 	echo 'lsof.label total'
 	echo 'lsof.type GAUGE'
 	echo 'lsof.max 10000'
@@ -80,11 +80,11 @@ fi
 #    "txs_sent": 1
 #}
 
-TFILE=/tmp/munin-electrumx-lsof-$$
-${ELECTRUMX_RPC} getinfo > $TFILE
+TFILE=/tmp/munin-fulcrum-lsof-$$
+${FULCRUM_RPC} getinfo > $TFILE
 
 pid=`grep pid $TFILE | grep -o '[0-9]*'`
-sessions=`grep \"count\" $TFILE | grep -o '[0-9]*'`
+sessions=`grep \"clients_connected\" $TFILE | grep -o '[0-9]*'`
 echo "sessions.value $sessions"
 
 /usr/bin/lsof -p $pid -n | grep -v -e lib/python -e LISTEN > $TFILE

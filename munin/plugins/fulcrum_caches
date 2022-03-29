@@ -5,16 +5,16 @@
 
 =head1 NAME
 
-electrumx_ses - Plugin to monitor ElectrumX server.
+fulcrum_ses - Plugin to monitor Fulcrum server.
 
 =head1 CONFIGURATION
 
-Settings are stored in /etc/munin/plugin-conf.d/electrumx.
-Edit the ELECTRUMX_RPC setting to specify the location of electrumx_rpc.py.
+Settings are stored in /etc/munin/plugin-conf.d/fulcrum.
+Edit the FULCRUM_RPC setting to specify the location of FulcrumAdmin.
 
 =head1 NOTES
 
-Uses env.ELECTRUMX_RPC in /etc/munin/plugin-conf.d/electrumx
+Uses env.FULCRUM_RPC in /etc/munin/plugin-conf.d/fulcrum
 
 =head1 AUTHOR
 
@@ -37,100 +37,52 @@ if [ "$1" = "autoconf" ]; then
 fi
 
 if [ "$1" = "config" ]; then
-	echo 'graph_title ElectrumX Caches'
+	echo 'graph_title Fulcrum Caches'
 	echo 'graph_args --base 1000 -l 0'
 	echo 'graph_vlabel per second'
-	echo 'graph_category ElectrumX'
+	echo 'graph_category Fulcrum'
 
-        echo 'history_cache_lookups.label history cache lookups'
-        echo 'history_cache_lookups.type DERIVE'
-        echo 'history_cache_lookups.min 0'
-        echo 'history_cache_hits.label history cache hits'
-        echo 'history_cache_hits.type DERIVE'
-        echo 'history_cache_hits.min 0'
-        echo 'history_cache_entries.label history cache entries'
-        echo 'history_cache_entries.type GAUGE'
+        echo 'LRU_cache_block_height_to_txhashes_misses.label LRU cache block height to txhashes misses'
+        echo 'LRU_cache_block_height_to_txhashes_misses.type DERIVE'
+        echo 'LRU_cache_block_height_to_txhashes_misses.min 0'
+        echo 'LRU_cache_block_height_to_txhashes_hits.label LRU cache block height to txhashes hits'
+        echo 'LRU_cache_block_height_to_txhashes_hits.type DERIVE'
+        echo 'LRU_cache_block_height_to_txhashes_hits.min 0'
+#        echo 'LRU_cache_block_height_to_txhashes_nblocks.label LRU cache block height to txhashes nBlocks'
+#        echo 'LRU_cache_block_height_to_txhashes_nblocks.type GAUGE'
 
-        echo 'merkle_cache_lookups.label merkle cache lookups'
-        echo 'merkle_cache_lookups.type DERIVE'
-        echo 'merkle_cache_lookups.min 0'
-        echo 'merkle_cache_hits.label merkle cache hits'
-        echo 'merkle_cache_hits.type DERIVE'
-        echo 'merkle_cache_hits.min 0'
-        echo 'merkle_cache_entries.label merkle cache entries'
-        echo 'merkle_cache_entries.type GAUGE'
+        echo 'LRU_cache_txnum_to_txhash_misses.label LRU cache txnum to txhash misses'
+        echo 'LRU_cache_txnum_to_txhash_misses.type DERIVE'
+        echo 'LRU_cache_txnum_to_txhash_misses.min 0'
+        echo 'LRU_cache_txnum_to_txhash_hits.label LRU cache txnum to txhash hits'
+        echo 'LRU_cache_txnum_to_txhash_hits.type DERIVE'
+        echo 'LRU_cache_txnum_to_txhash_hits.min 0'
+#        echo 'LRU_cache_txnum_to_txhash_nitems.label LRU cache txnum to txhash nItems'
+#        echo 'LRU_cache_txnum_to_txhash_nitems.type GAUGE'
 
-        echo 'tx_hashes_cache_lookups.label tx hashes cache lookups'
-        echo 'tx_hashes_cache_lookups.type DERIVE'
-        echo 'tx_hashes_cache_lookups.min 0'
-        echo 'tx_hashes_cache_hits.label tx hashes cache hits'
-        echo 'tx_hashes_cache_hits.type DERIVE'
-        echo 'tx_hashes_cache_hits.min 0'
-        echo 'tx_hashes_cache_entries.label tx hashes cache entries'
-        echo 'tx_hashes_cache_entries.type GAUGE'
+        echo 'subs_cache_misses.label subscriptions cache misses'
+        echo 'subs_cache_misses.type DERIVE'
+        echo 'subs_cache_misses.min 0'
+        echo 'subs_cache_hits.label subscriptions cache hits'
+        echo 'subs_cache_hits.type DERIVE'
+        echo 'subs_cache_hits.min 0'
+#        echo 'subs_bucket_count.label subscriptions bucket count'
+#        echo 'subs_bucket_count.type GAUGE'
 
 	exit 0
 fi
 
-#{
-#    "coin": "BitcoinSegwit",
-#    "daemon": "127.0.0.1:8332/",
-#    "daemon height": 572624,
-#    "db height": 572624,
-#    "groups": 23,
-#    "history cache": "39,818 lookups 7,040 hits 1,000 entries",
-#    "merkle cache": "43,260 lookups 21,801 hits 1,000 entries",
-#    "peers": {
-#        "bad": 0,
-#        "good": 0,
-#        "never": 0,
-#        "stale": 0,
-#        "total": 0
-#    },
-#    "pid": 40652,
-#    "request counts": {
-#        "blockchain.block.header": 1145,
-#        "blockchain.block.headers": 440,
-#        "blockchain.estimatefee": 26860,
-#        "blockchain.headers.subscribe": 19547,
-#        "blockchain.relayfee": 3479,
-#        "blockchain.scripthash.get_history": 1998,
-#        "blockchain.scripthash.listunspent": 20,
-#        "blockchain.scripthash.subscribe": 37787,
-#        "blockchain.transaction.get": 98395,
-#        "blockchain.transaction.get_merkle": 47372,
-#        "disconnect": 20035,
-#        "getinfo": 10421,
-#        "mempool.get_fee_histogram": 6718,
-#        "peers": 3104,
-#        "server.banner": 3484,
-#        "server.donation_address": 3522,
-#        "server.peers.subscribe": 3,
-#        "server.ping": 570,
-#        "server.version": 24474,
-#        "sessions": 31938
-#    },
-#    "request total": 341312,
-#    "sessions": {
-#        "count": 5,
-#        "count with subs": 1,
-#        "errors": 0,
-#        "logged": 0,
-#        "paused": 0,
-#        "pending requests": 1,
-#        "subs": 31
-#    },
-#    "tx hashes cache": "47,372 lookups 15,373 hits 1,000 entries",
-#    "txs sent": 0,
-#    "uptime": "1d 23h 34m",
-#    "version": "ElectrumX 1.11.0"
-#}
+TFILE=/tmp/munin-fulcrum-reqcounts-$$
+curl -s http://127.0.0.1:8081/stats > $TFILE
 
-TFILE=/tmp/munin-electrumx-reqcounts-$$
-${ELECTRUMX_RPC} getinfo > $TFILE
-
-grep '\"history cache\"' $TFILE | sed 's/"//g; s/,//g' | awk '{ print "history_cache_lookups.value " $3 "\nhistory_cache_hits.value " $5 "\nhistory_cache_entries.value " $7 }'
-grep '\"merkle cache\"' $TFILE | sed 's/"//g; s/,//g'  | awk '{ print "merkle_cache_lookups.value " $3 "\nmerkle_cache_hits.value " $5 "\nmerkle_cache_entries.value " $7 }'
-grep '\"tx hashes cache\"' $TFILE | sed 's/"//g; s/,//g'  | awk '{ print "tx_hashes_cache_lookups.value " $4 "\ntx_hashes_cache_hits.value " $6 "\ntx_hashes_cache_entries.value " $8 }'
+jq '.Storage.caches."LRU Cache: Block Height -> TxHashes"."~misses"' $TFILE | { read misses; echo "LRU_cache_block_height_to_txhashes_misses.value" $misses; }
+jq '.Storage.caches."LRU Cache: Block Height -> TxHashes"."~hits"' $TFILE | { read hits; echo "LRU_cache_block_height_to_txhashes_hits.value" $hits; }
+#jq '.Storage.caches."LRU Cache: Block Height -> TxHashes"."nBlocks"' $TFILE | { read nBlocks; echo "LRU_cache_block_height_to_txhashes_nblocks.value" $nBlocks; }
+jq '.Storage.caches."LRU Cache: TxNum -> TxHash"."~misses"' $TFILE | { read misses; echo "LRU_cache_txnum_to_txhash_misses.value" $misses; }
+jq '.Storage.caches."LRU Cache: TxNum -> TxHash"."~hits"' $TFILE | { read hits; echo "LRU_cache_txnum_to_txhash_hits.value" $hits; }
+#jq '.Storage.caches."LRU Cache: TxNum -> TxHash"."nItems"' $TFILE | { read nItems; echo "LRU_cache_txnum_to_txhash_nitems.value" $nItems; }
+jq '.SubsMgr."subscriptions cache misses"' $TFILE | { read misses; echo "subs_cache_misses.value" $misses; }
+jq '.SubsMgr."subscriptions cache hits"' $TFILE | { read hits; echo "subs_cache_hits.value" $hits; }
+#jq '.SubsMgr."subscriptions bucket count"' $TFILE | { read count; echo "subs_bucket_count.value" $count; }
 
 rm $TFILE
